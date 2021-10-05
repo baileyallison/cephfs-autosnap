@@ -17,7 +17,7 @@ from optparse import OptionParser
 # checks for cephfs mounts, and exits if none are found
 #################################################################################
 ##try to get this working without shell=true
-def queryCephFSmounts():
+def queryCephFSmounts(options):
     try:
         cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
 ##if no mounts are found exit
@@ -92,7 +92,7 @@ def choose_output_header(options):
 		return "Dev"
 	output = []
 	if options.snap:
-		output.append("Model")
+		do: queryCephFSmounts
 	if options.taketime:
 		output.append("Model")
 	if options.keeptime:

@@ -17,17 +17,17 @@ from optparse import OptionParser
 #################################################################################
 ##try to get this working without shell=true
 def queryCephFSmounts():
-#    try:
-#        cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
+    try:
+        cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
 ##if no mounts are found exit
-#    except subprocess.CalledProcessError:
-#        do: sys.exit()
+    except subprocess.CalledProcessError:
+        do: sys.exit()
 
 
 #################################################################################
 # validate cephfs mount point and query where snaps would be taken
 #################################################################################
-    try:
+    else:
         pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
         df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
@@ -37,7 +37,7 @@ def queryCephFSmounts():
         if "ceph" in is_it_ceph:
             print("yes, good choice")
 ##if not cephfs dir validate
-    except "ceph" not in is_it_ceph:
+        elif "ceph" not in is_it_ceph:
             print("not a valid cephfs directory")
             do: sys.exit()
 

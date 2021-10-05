@@ -109,17 +109,7 @@ def no_output_flags(options):
 	return (not options.taketime and not options.keeptime
 			and not options.snap)
 
-#################################################################################
-# query to see if cephfs mounts exist
-# checks for cephfs mounts, and exits if none are found
-#################################################################################
-##try to get this working without shell=true
-def queryCephFSmounts():
-    try:
-        cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
-##if no mounts are found exit
-    except subprocess.CalledProcessError:
-        do: sys.exit()
+        
 #################################################################################
 # don't need this anymore
 #################################################################################

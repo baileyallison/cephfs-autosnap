@@ -19,14 +19,16 @@ from optparse import OptionParser
 def queryCephFSmounts():
     try:
         cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
+        print("yo whatup print check")
     except subprocess.CalledProcessError:
         do: sys.exit()
-
+        
 
 #################################################################################
 # validate cephfs mount point and query where snaps would be taken
 #################################################################################
     else:
+        print("yo whatup print check")
         pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
         df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
@@ -68,7 +70,7 @@ def parsingArgs():
     parser.add_option('-c', '--create-snap', action="store_true",
 		dest="create-snap", type="string", default=False, help="create snap on dir path")
     (options, args) = parser.parse_args()
-print("yo whatup print check2")
+print("yo whatup print check")
 ## not ready
     #parser.add_option("-t", "--take-time", action="store_false",
 	#	dest="take-time", default=True, help="take time of autosnaps")

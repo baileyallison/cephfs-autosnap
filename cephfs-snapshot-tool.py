@@ -12,6 +12,21 @@ import re
 import sys
 from optparse import OptionParser
 
+################################################################################
+# parses options, allows to create+edit+view snapshot tasks
+################################################################################
+def main():
+    parser = OptionParser() #use optparse to handle command line arguments
+    parser.add_option("-c", "--create-snap", action="store_true",
+		dest="snap", default=False, help="create snap on dir")
+    parser.add_option("-t", "--take-time", action="store_false",
+		dest="take-time", default=True, help="take time of autosnaps")
+    parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
+		default=False, help="keep-time of autosnaps")
+    parser.add_option("-o", "--output", action="store_true", dest="output",
+		default=False, help="output current active snapshot tasks")
+    (options, args) = parser.parse_args()
+
 #################################################################################
 # options
 #################################################################################

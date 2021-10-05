@@ -23,9 +23,9 @@ try:
 except subprocess.CalledProcessError:
     do: sys.exit()
 ##print list of found mounts -- not neccessary to print
-else:
-    cephfsMounts = cephfsMountChecks.replace(" ceph", "")
-    print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
+#else:
+#    cephfsMounts = cephfsMountChecks.replace(" ceph", "")
+#    print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
 
 
 
@@ -33,6 +33,7 @@ else:
 #################################################################################
 # validate cephfs mount point and query where snaps would be taken
 #################################################################################
+else:
     pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
     #pathToDirVar = str(pathToDirQuery)
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)

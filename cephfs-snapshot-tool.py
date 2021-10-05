@@ -54,7 +54,7 @@ def queryCephFSmounts():
     elif pathToDirQuery.endswith(""):
         mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
         print(pathToDirQuery.rsplit('/')[-1])
-
+queryCephFSmounts()
 ###############################################################################
 # manual cephfs snaps
 ###############################################################################
@@ -76,7 +76,7 @@ def queryCephFSmounts():
 def parsingArgs():
     parser = OptionParser() #use optparse to handle command line arguments
     parser.add_option('-c', '--create-snap', action="store_true",
-		dest="create-snap", type="string", default=False, help="create snap on dir path")
+		dest="createsnap", type="string", default=False, help="create snap on dir path")
     (options, args) = parser.parse_args()
 print("yo whatup print check")
 ## not ready
@@ -86,7 +86,8 @@ print("yo whatup print check")
 	#	default=False, help="keep-time of autosnaps")
     #parser.add_option("-o", "--output", action="store_true", dest="output",
 	#	default=False, help="output current active snapshot tasks")
-
+if __name__ == "__parsingArgs__":
+	parsingArgs()
 
 
 #################################################################################
@@ -96,7 +97,7 @@ print("yo whatup print check")
 #	if no_output_flags(options):
 #		return "Dev"
 #	output = []
-#	if options.snap:
+#	if options.createsnap:
 #		do: queryCephFSmounts
 
 ## not ready

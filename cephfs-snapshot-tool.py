@@ -19,35 +19,28 @@ from optparse import OptionParser
 def queryCephFSmounts():
     try:
         cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
-        print("yo whatup print check")
-    except subprocess.CalledProcessError:
-        do: sys.exit()
+    except OSError:
+        print("no cephfs mounts found")
         
-
-#################################################################################
-# validate cephfs mount point and query where snaps would be taken
-#################################################################################
-    else:
-        print("yo whatup print check")
         pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
         df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
         df_pathtocephfs.stdout.close()
         is_it_ceph, err = awk_for_ceph.communicate()
+        if "ceph" in is_it_ceph:
+            dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
+            if pathToDirQuery.endswith("/"):
+                mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
+            elif pathToDirQuery.endswith(""):
+                mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
+                print(pathToDirQuery.rsplit('/')[-1])
+        elif "ceph" not in is_it_ceph:
+            do: sys.exit()
         print("yo whatup print check")
 ###############################################################################
 # manual cephfs snaps
 ###############################################################################
-    if "ceph" in is_it_ceph:
-        dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
-    if pathToDirQuery.endswith("/"):
-        mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
-    elif pathToDirQuery.endswith(""):
-        mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
-        print(pathToDirQuery.rsplit('/')[-1])
-    elif "ceph" not in is_it_ceph:
-        do: sys.exit()
-print("yo whatup print check")
+
 #################################################################################
 # auto cephfs snaps
 #################################################################################

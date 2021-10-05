@@ -23,9 +23,9 @@ try:
 except subprocess.CalledProcessError:
     do: sys.exit()
 ##print list of found mounts -- not neccessary to print
-#else:
-#    cephfsMounts = cephfsMountChecks.replace(" ceph", "")
-#    print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
+else:
+    cephfsMounts = cephfsMountChecks.replace(" ceph", "")
+    print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
 
 
 

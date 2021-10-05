@@ -1,53 +1,22 @@
 #!/usr/local/bin/python3
 
-####
-####CephFS-snapshots for taking CephFS-snapshots
-##Linux/GNU License here
-####Is titles
-##Is comments/notes
-
+#################################################################################
+# CephFS-snapshots for taking CephFS-snapshots
+# Linux/GNU License here
+#################################################################################
 from os import path
 import subprocess
 import re
 import sys
 from optparse import OptionParser
 
-################################################################################
-# parses options, allows to create+edit+view snapshot tasks
-################################################################################
-def main():
-    parser = OptionParser() #use optparse to handle command line arguments
-    parser.add_option("-c", "--create-snap", action="store_true",
-		dest="snap", default=False, help="create snap on dir")
-    parser.add_option("-t", "--take-time", action="store_false",
-		dest="take-time", default=True, help="take time of autosnaps")
-    parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
-		default=False, help="keep-time of autosnaps")
-    parser.add_option("-o", "--output", action="store_true", dest="output",
-		default=False, help="output current active snapshot tasks")
-    (options, args) = parser.parse_args()
-
-#################################################################################
-# options
-#################################################################################
-def choose_output_header(options):
-	if no_output_flags(options):
-		return "Dev"
-	output = []
-	if options.snap:
-		do: queryCephFSmounts
-	if options.taketime:
-		output.append("Model")
-	if options.keeptime:
-		output.append("Serial")
-	return ",".join(output)
 
 #################################################################################
 # query to see if cephfs mounts exist
 # checks for cephfs mounts, and exits if none are found
 #################################################################################
 ##try to get this working without shell=true
-def queryCephFSmounts(options):
+def queryCephFSmounts():
     try:
         cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
 ##if no mounts are found exit
@@ -58,19 +27,19 @@ def queryCephFSmounts(options):
 #################################################################################
 # validate cephfs mount point and query where snaps would be taken
 #################################################################################
-    if options.snap:
-            pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
-            df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-            awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
-            df_pathtocephfs.stdout.close()
-            is_it_ceph, err = awk_for_ceph.communicate()
+    else:
+        pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
+        df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
+        df_pathtocephfs.stdout.close()
+        is_it_ceph, err = awk_for_ceph.communicate()
 ##if cephfs directory validate
-            if "ceph" in is_it_ceph:
-                print("yes, good choice")
+        if "ceph" in is_it_ceph:
+            print("yes, good choice")
 ##if not cephfs dir validate
-            elif "ceph" not in is_it_ceph:
-                print("not a valid cephfs directory")
-                do: sys.exit()
+        elif "ceph" not in is_it_ceph:
+            print("not a valid cephfs directory")
+            do: sys.exit()
 
 
 ###############################################################################
@@ -86,7 +55,6 @@ def queryCephFSmounts(options):
         mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
         print(pathToDirQuery.rsplit('/')[-1])
 
-
 #################################################################################
 # auto cephfs snaps
 #################################################################################
@@ -101,18 +69,17 @@ def queryCephFSmounts(options):
 ################################################################################
 # parses options, allows to create+edit+view snapshot tasks
 ################################################################################
-def main():
+def parsingArgs():
     parser = OptionParser() #use optparse to handle command line arguments
-    parser.add_option("-c", "--create-snap", action="store_true",
-		dest="snap", default=False, help="create snap on dir")
-    parser.add_option("-t", "--take-time", action="store_false",
-		dest="take-time", default=True, help="take time of autosnaps")
-    parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
-		default=False, help="keep-time of autosnaps")
-    parser.add_option("-o", "--output", action="store_true", dest="output",
-		default=False, help="output current active snapshot tasks")
+    parser.add_option('-c', '--create-snap', action="store_true",
+		dest="snap", type="string", default=False, help="create snap on dir path")
+    #parser.add_option("-t", "--take-time", action="store_false",
+	#	dest="take-time", default=True, help="take time of autosnaps")
+    #parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
+	#	default=False, help="keep-time of autosnaps")
+    #parser.add_option("-o", "--output", action="store_true", dest="output",
+	#	default=False, help="output current active snapshot tasks")
     (options, args) = parser.parse_args()
-
 
 #################################################################################
 # options
@@ -123,10 +90,10 @@ def choose_output_header(options):
 	output = []
 	if options.snap:
 		do: queryCephFSmounts
-	if options.taketime:
-		output.append("Model")
-	if options.keeptime:
-		output.append("Serial")
+	#if options.taketime:
+	#	option
+	#if options.keeptime:
+	#	option
 	return ",".join(output)
 
 ################################################################################

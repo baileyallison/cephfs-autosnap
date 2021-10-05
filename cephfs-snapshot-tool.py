@@ -12,13 +12,14 @@ import re
 import sys
 from optparse import OptionParser
 
-
-
+#################################################################################
+# query to see if cephfs mounts exist
+#################################################################################
 
 ####checks for cephfs mounts, and exits if none are found
 try:
 ##try to get this working without shell=true
-    cephfsMountChecks = subprocess.check_output("df -P -T | tail -n +2 | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
+    cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
 ##if no mounts are found exit
 except subprocess.CalledProcessError:
     print("no cephfs mounts found")
@@ -27,14 +28,11 @@ else:
     cephfsMounts = cephfsMountChecks.replace(" ceph", "")
     print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
 
-
-
-
 ####Where would you like your ceph snapshot(s) to be
 ##query where user would like snapshot(s) to be taken
     pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
-    pathToDirVar = str(pathToDirQuery)
-    df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirVar], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    #pathToDirVar = str(pathToDirQuery)
+    df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
     df_pathtocephfs.stdout.close()
     is_it_ceph, err = awk_for_ceph.communicate()
@@ -46,22 +44,29 @@ else:
         print("not a valid cephfs directory")
         do: sys.exit()
 
+###############################################################################
+# manual cephfs snaps
+###############################################################################
 
 ####What would you like your snapshot task(s) to be
 ##Manual Snapshots
     dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
-    if pathToDirVar.endswith("/"):
+    if pathToDirQuery.endswith("/"):
         #p2dvr = re.search('/(.*)/', pathToDirVar)
-        mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirVar}"+'.snap/'+f"{pathToDirVar.split('/')[-2]}"+f"-{dayTimeVar}"])
-    elif pathToDirVar.endswith(""):
-        mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirVar}"+'/.snap/'+f"{pathToDirVar.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
-        print(pathToDirVar.rsplit('/')[-1])
+        mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
+    elif pathToDirQuery.endswith(""):
+        mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
+        print(pathToDirQuery.rsplit('/')[-1])
+
+#################################################################################
+# auto cephfs snaps
+#################################################################################
 
 ##Auto Snapshots
-##vars
-#cephfsdir-snapvar
-#timetotake-var
-#timetodelete-var
+##vars for auto snaps
+#cephfsdir-snapvar -- path to cephfsdir to take auto snaps
+#timetotake-var -- the time to take snaps - x mins,x hourly,x daily,x weekly,x yearly
+#timetodelete-var -- the time to delete snaps - x mins,x hourly,x daily,x weekly,x yearly
 
 
 ################################################################################
@@ -79,7 +84,9 @@ def main():
 	parser.add_option("-k", "--keep-time", action="store_true", dest="keep-time",
 			default=False, help="keep-time of autosnaps")
 	parser.add_option("-o", "--output", action="store_true", dest="output",
-			default=False, help="output current active snapshot tasks")
+			default=False, help="output current active snapshot tasks")        
+    #parser.add_option("-h", "--help", action="store_true", dest="help",
+	#		default=False, help="output options for command")
 	(options, args) = parser.parse_args()
 
 ##################################################################################

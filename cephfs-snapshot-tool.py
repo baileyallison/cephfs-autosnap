@@ -69,32 +69,32 @@ def queryCephFSmounts():
 ################################################################################
 # parses options, allows to create+edit+view snapshot tasks
 ################################################################################
-def parsingArgs():
-    parser = OptionParser() #use optparse to handle command line arguments
-    parser.add_option('-c', '--create-snap', action="store_true",
-		dest="snap", type="string", default=False, help="create snap on dir path")
+#def parsingArgs():
+#    parser = OptionParser() #use optparse to handle command line arguments
+#    parser.add_option('-c', '--create-snap', action="store_true",
+#		dest="snap", type="string", default=False, help="create snap on dir path")
     #parser.add_option("-t", "--take-time", action="store_false",
 	#	dest="take-time", default=True, help="take time of autosnaps")
     #parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
 	#	default=False, help="keep-time of autosnaps")
     #parser.add_option("-o", "--output", action="store_true", dest="output",
 	#	default=False, help="output current active snapshot tasks")
-    (options, args) = parser.parse_args()
+#    (options, args) = parser.parse_args()
 
 #################################################################################
 # options
 #################################################################################
-def choose_output_header(options):
-	if no_output_flags(options):
-		return "Dev"
-	output = []
-	if options.snap:
-		do: queryCephFSmounts
+#def choose_output_header(options):
+#	if no_output_flags(options):
+#		return "Dev"
+#	output = []
+#	if options.snap:
+#		do: queryCephFSmounts
 	#if options.taketime:
 	#	option
 	#if options.keeptime:
 	#	option
-	return ",".join(output)
+#	return ",".join(output)
 
 ################################################################################
 # function name: no_output_flags
@@ -102,9 +102,9 @@ def choose_output_header(options):
 # does: determines if no flags are passed for default output
 # returns: True if default output, else False
 ################################################################################
-def no_output_flags(options):
-	return (not options.taketime and not options.keeptime
-			and not options.snap)
+#def no_output_flags(options):
+#	return (not options.taketime and not options.keeptime
+#			and not options.snap)
 
         
 #################################################################################

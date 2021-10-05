@@ -19,7 +19,6 @@ from optparse import OptionParser
 def queryCephFSmounts():
     try:
         cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
-##if no mounts are found exit
     except subprocess.CalledProcessError:
         do: sys.exit()
 
@@ -33,13 +32,6 @@ def queryCephFSmounts():
         awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
         df_pathtocephfs.stdout.close()
         is_it_ceph, err = awk_for_ceph.communicate()
-##if cephfs directory validate
-        if "ceph" in is_it_ceph:
-            print("yes, good choice")
-##if not cephfs dir validate
-        elif "ceph" not in is_it_ceph:
-            print("not a valid cephfs directory")
-            do: sys.exit()
 
 ###############################################################################
 # manual cephfs snaps
@@ -47,16 +39,16 @@ def queryCephFSmounts():
 
 ####What would you like your snapshot task(s) to be
 ##Manual Snapshots
-    dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
+    if "ceph" in is_it_ceph:
+        dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
     if pathToDirQuery.endswith("/"):
         mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
     elif pathToDirQuery.endswith(""):
         mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
         print(pathToDirQuery.rsplit('/')[-1])
-
-def do_cmd(options):
-    if options.snap:
-        do: queryCephFSmounts()
+    elif "ceph" not in is_it_ceph:
+        do: sys.exit()
+print("yo whatup print check")
 #################################################################################
 # auto cephfs snaps
 #################################################################################
@@ -74,28 +66,30 @@ def do_cmd(options):
 def parsingArgs():
     parser = OptionParser() #use optparse to handle command line arguments
     parser.add_option('-c', '--create-snap', action="store_true",
-		dest="snap", type="string", default=False, help="create snap on dir path")
+		dest="create-snap", type="string", default=False, help="create snap on dir path")
+    (options, args) = parser.parse_args()
+print("yo whatup print check2")
+## not ready
     #parser.add_option("-t", "--take-time", action="store_false",
 	#	dest="take-time", default=True, help="take time of autosnaps")
     #parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
 	#	default=False, help="keep-time of autosnaps")
     #parser.add_option("-o", "--output", action="store_true", dest="output",
 	#	default=False, help="output current active snapshot tasks")
-    (options, args) = parser.parse_args()
 
-def do_cmd(parsingArgs):
-    output = []
-    if options.snap:
-        do: queryCephFSmounts
+
+
 #################################################################################
 # options
 #################################################################################
-def choose_output_header(options):
-	if no_output_flags(options):
-		return "Dev"
-	output = []
-	if options.snap:
-		do: queryCephFSmounts
+#def choose_output_header(options):
+#	if no_output_flags(options):
+#		return "Dev"
+#	output = []
+#	if options.snap:
+#		do: queryCephFSmounts
+
+## not ready
 	#if options.taketime:
 	#	option
 	#if options.keeptime:
@@ -121,3 +115,10 @@ def choose_output_header(options):
 # else:
 #     cephfsMounts = cephfsMountChecks.replace(" ceph", "")
 #     print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
+
+## validation that ceph dir is ceph or not ceph -- not neccessary to print 
+#        if "ceph" in is_it_ceph:
+#            print("yes, good choice")
+#        elif "ceph" not in is_it_ceph:
+#            print("not a valid cephfs directory")
+#            do: sys.exit()

@@ -13,6 +13,21 @@ import sys
 from optparse import OptionParser
 
 #################################################################################
+# options
+#################################################################################
+def choose_output_header(options):
+	if no_output_flags(options):
+		return "Dev"
+	output = []
+	if options.snap:
+		do: queryCephFSmounts
+	if options.taketime:
+		output.append("Model")
+	if options.keeptime:
+		output.append("Serial")
+	return ",".join(output)
+
+#################################################################################
 # query to see if cephfs mounts exist
 # checks for cephfs mounts, and exits if none are found
 #################################################################################

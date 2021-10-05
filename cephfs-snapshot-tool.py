@@ -41,7 +41,6 @@ def queryCephFSmounts():
             print("not a valid cephfs directory")
             do: sys.exit()
 
-
 ###############################################################################
 # manual cephfs snaps
 ###############################################################################
@@ -55,6 +54,8 @@ def queryCephFSmounts():
         mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
         print(pathToDirQuery.rsplit('/')[-1])
 
+
+queryCephFSmounts()
 #################################################################################
 # auto cephfs snaps
 #################################################################################

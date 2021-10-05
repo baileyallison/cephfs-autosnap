@@ -28,19 +28,19 @@ def queryCephFSmounts(options):
 #################################################################################
 # validate cephfs mount point and query where snaps would be taken
 #################################################################################
-    else:
-        pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
-        df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-        awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
-        df_pathtocephfs.stdout.close()
-        is_it_ceph, err = awk_for_ceph.communicate()
+    if options.snap:
+            pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
+            df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+            awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
+            df_pathtocephfs.stdout.close()
+            is_it_ceph, err = awk_for_ceph.communicate()
 ##if cephfs directory validate
-        if "ceph" in is_it_ceph:
-            print("yes, good choice")
+            if "ceph" in is_it_ceph:
+                print("yes, good choice")
 ##if not cephfs dir validate
-        elif "ceph" not in is_it_ceph:
-            print("not a valid cephfs directory")
-            do: sys.exit()
+            elif "ceph" not in is_it_ceph:
+                print("not a valid cephfs directory")
+                do: sys.exit()
 
 
 ###############################################################################

@@ -14,22 +14,26 @@ from optparse import OptionParser
 
 #################################################################################
 # query to see if cephfs mounts exist
+# checks for cephfs mounts, and exits if none are found
 #################################################################################
-
-####checks for cephfs mounts, and exits if none are found
 try:
 ##try to get this working without shell=true
     cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
 ##if no mounts are found exit
 except subprocess.CalledProcessError:
-    print("no cephfs mounts found")
-##print list of found mounts
-else:
-    cephfsMounts = cephfsMountChecks.replace(" ceph", "")
-    print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
+    do: sys.exit()
+##print list of found mounts -- not neccessary to print
+#else:
+#    cephfsMounts = cephfsMountChecks.replace(" ceph", "")
+#    print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')
 
-####Where would you like your ceph snapshot(s) to be
-##query where user would like snapshot(s) to be taken
+
+
+
+#################################################################################
+# validate cephfs mount point and query where snaps would be taken
+#################################################################################
+else:
     pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
@@ -43,6 +47,11 @@ else:
         print("not a valid cephfs directory")
         do: sys.exit()
 
+
+
+
+
+
 ###############################################################################
 # manual cephfs snaps
 ###############################################################################
@@ -51,7 +60,6 @@ else:
 ##Manual Snapshots
     dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
     if pathToDirQuery.endswith("/"):
-        #p2dvr = re.search('/(.*)/', pathToDirVar)
         mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
     elif pathToDirQuery.endswith(""):
         mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])

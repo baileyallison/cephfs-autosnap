@@ -19,7 +19,7 @@ from optparse import OptionParser
 def queryCephFSmounts():
     try:
         cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
-    except OSError:
+    except subprocess.CalledProcessError:
         print("no cephfs mounts found")
         
         pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")

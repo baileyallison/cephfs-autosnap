@@ -31,7 +31,6 @@ else:
 ####Where would you like your ceph snapshot(s) to be
 ##query where user would like snapshot(s) to be taken
     pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
-    #pathToDirVar = str(pathToDirQuery)
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
     df_pathtocephfs.stdout.close()
@@ -70,27 +69,18 @@ else:
 
 
 ################################################################################
-# function name: main
-# receives: nothing
-# does: parses CLI options, allows to create+edit+view snapshot tasks
-# returns: 0 (success)
+#parses CLI options, allows to create+edit+view snapshot tasks
 ################################################################################
 def main():
-	parser = OptionParser() #use optparse to handle command line arguments
-	parser.add_option("-c", "--create-snap", action="store_true",
-			dest="snap", default=False, help="create snap on dir")
-	parser.add_option("-t", "--take-time", action="store_false",
-			dest="take-time", default=True, help="take time of autosnaps")
-	parser.add_option("-k", "--keep-time", action="store_true", dest="keep-time",
-			default=False, help="keep-time of autosnaps")
-	parser.add_option("-o", "--output", action="store_true", dest="output",
-			default=False, help="output current active snapshot tasks")        
-    #parser.add_option("-h", "--help", action="store_true", dest="help",
-	#		default=False, help="output options for command")
-	(options, args) = parser.parse_args()
-
-##################################################################################
-# example of parser.add_option
-##################################################################################
-	#parser.add_option("-m", "--model", action="store_true", dest="outputModel",
-	#		default=False, help="Output model names")
+    parser = OptionParser() #use optparse to handle command line arguments
+    parser.add_option("-c", "--create-snap", action="store_true",
+		dest="snap", default=False, help="create snap on dir")
+    parser.add_option("-t", "--take-time", action="store_false",
+		dest="take-time", default=True, help="take time of autosnaps")
+    parser.add_option("-k", "--keep-time", action="store_true", dest="keep-time",
+		default=False, help="keep-time of autosnaps")
+    parser.add_option("-o", "--output", action="store_true", dest="output",
+		default=False, help="output current active snapshot tasks")
+    #parser.add_option("-h", "--help", action="store_true", dest="output",
+	#	default=False, help="output options")
+    (options, args) = parser.parse_args()

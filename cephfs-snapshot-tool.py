@@ -58,39 +58,3 @@ pathofCephFS_snaps()
 #cephfsdir-snapvar -- path to cephfsdir to take auto snaps
 #timetotake-var -- the time to take snaps - x mins,x hourly,x daily,x weekly,x yearly
 #timetodelete-var -- the time to delete snaps - x mins,x hourly,x daily,x weekly,x yearly
-
-
-################################################################################
-# parses options, allows to create+edit+view snapshot tasks
-################################################################################
-def parsingArgs():
-    parser = OptionParser() #use optparse to handle command line arguments
-    parser.add_option('-c', '--create-snap', action="store_true",
-		dest="createsnap", type="string", default=False, help="create snap on dir path")
-    (options, args) = parser.parse_args()
-
-## not ready
-    #parser.add_option("-t", "--take-time", action="store_false",
-	#	dest="take-time", default=True, help="take time of autosnaps")
-    #parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
-	#	default=False, help="keep-time of autosnaps")
-    #parser.add_option("-o", "--output", action="store_true", dest="output",
-	#	default=False, help="output current active snapshot tasks")
-
-
-#################################################################################
-# options
-#################################################################################
-#def choose_output_header(options):
-#	if no_output_flags(options):
-#		return "Dev"
-#	output = []
-#	if options.createsnap:
-#		do: queryCephFSmounts
-
-## not ready
-	#if options.taketime:
-	#	option
-	#if options.keeptime:
-	#	option
-#	return ",".join(output)

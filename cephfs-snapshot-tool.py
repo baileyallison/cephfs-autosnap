@@ -93,7 +93,7 @@ def main():
     if options.print_task:
         print("hello! you have found the task that let me figure out how parser works")
     if options.createsnap:
-        pathofCephFS_snaps()
+        pathofCephFS_snaps(options)
 
 if __name__ == "__main__":
 	main()

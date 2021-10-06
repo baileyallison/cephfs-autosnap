@@ -18,7 +18,6 @@ from optparse import OptionParser
 ##try to get this working without shell=true
 def queryCephFSmounts():
     try:
-        #cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
         cephfsMountChecks_df = subprocess.Popen(['df', '-PTh'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         cephfsMountChecks_awk = subprocess.Popen(['awk', '{print($7, $2)}'], stdin=cephfsMountChecks_df.stdout, stdout=subprocess.PIPE)
         cephfsMountChecks_grep = subprocess.Popen(['grep', 'ceph'], stdin=cephfsMountChecks_awk.stdout, stdout=subprocess.PIPE, universal_newlines=True)

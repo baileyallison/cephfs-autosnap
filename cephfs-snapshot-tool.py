@@ -25,10 +25,9 @@ def queryCephFSmounts():
         cephfsMountChecks_awk.stdout.close()
         mount_check, err = cephfsMountChecks_grep.communicate()
         if "ceph" not in mount_check:
-            print("hello")
-            do: sys.exit()
+            sys.exit()
     except subprocess.CalledProcessError:
-        do: sys.exit()
+        sys.exit()
 
 queryCephFSmounts()
 

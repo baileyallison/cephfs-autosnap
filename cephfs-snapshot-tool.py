@@ -23,7 +23,6 @@ import re
 import sys
 from optparse import OptionParser
 
-
 #################################################################################
 # query to see if cephfs mounts exist
 # checks for cephfs mounts, and exits if none are found
@@ -43,7 +42,9 @@ def queryCephFSmounts():
 
 queryCephFSmounts()
 
-
+###################################################################################
+# manual cephfs snapshots
+###################################################################################
 def pathofCephFS_snaps():
     pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
@@ -54,14 +55,14 @@ def pathofCephFS_snaps():
         dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
         if pathToDirQuery.endswith("/"):
             mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
+            print("Snapshot created:" (pathToDirQuery.rsplit('/')[-1])+"-"(dayTimeVar))
         elif pathToDirQuery.endswith(""):
             mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
-            print(pathToDirQuery.rsplit('/')[-1])
+            print("Snapshot created:" (pathToDirQuery.rsplit('/')[-1])+"-"(dayTimeVar))
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")
         do: sys.exit()
-#if options.createsnap:
-#    pathofCephFS_snaps()
+
 #################################################################################
 # auto cephfs snaps
 #################################################################################
@@ -71,6 +72,7 @@ def pathofCephFS_snaps():
 #cephfsdir-snapvar -- path to cephfsdir to take auto snaps
 #timetotake-var -- the time to take snaps - x mins,x hourly,x daily,x weekly,x yearly
 #timetodelete-var -- the time to delete snaps - x mins,x hourly,x daily,x weekly,x yearly
+#def scheduledcephfsSnaps():
 
 
 ################################################################################
@@ -80,7 +82,7 @@ def main():
     parser = OptionParser()
     parser.add_option('-c', '--create-snap', action="store_true",
 		dest="createsnap", default=False, help="create a snapshot on specified path")
-    parser.add_option('-s', '--schedule', action="store_true",
+    parser.add_option('-s', '--schedule-snap', action="store_true",
 		dest="schedulesnap", default=False, help="schedule a snapshot task on specified path")
     parser.add_option("-p", "--print", action="store_true",
         dest="print_task", default=False, help="print debug message for testing")

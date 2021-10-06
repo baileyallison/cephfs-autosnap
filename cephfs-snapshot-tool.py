@@ -85,6 +85,9 @@ def main():
     parser.add_option("-p", "--print", action="store_true",
         dest="print_task", default=False, help="print debug message for testing")
     (options, args) = parser.parse_args()
+    
+    if options.print_task:
+        print("hello!")
 
 if __name__ == "__main__":
 	main()

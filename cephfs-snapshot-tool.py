@@ -45,7 +45,7 @@ queryCephFSmounts()
 ###################################################################################
 # manual cephfs snapshots
 ###################################################################################
-def pathofCephFS_snaps():
+def pathofCephFS_snaps(options):
     pathToDirQuery=options.createsnap
     #pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)

@@ -88,18 +88,11 @@ def main():
     
     if options.print_task:
         print("hello!")
+    if options.createsnap:
+        pathofCephFS_snaps()
 
 if __name__ == "__main__":
 	main()
-def print_check(options):
-    if options.print_task:
-        print("hello!")
-
-def create_snaps(options):
-    if options.createsnap:
-        pathofCephFS_snaps()
-    else:
-        exit(1)
 ## not ready
     #parser.add_option("-t", "--take-time", action="store_false",
 	#	dest="take-time", default=True, help="take time of autosnaps")

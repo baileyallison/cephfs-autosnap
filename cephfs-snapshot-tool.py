@@ -34,12 +34,12 @@ def queryCephFSmounts():
         df_pathtocephfs.stdout.close()
         is_it_ceph, err = awk_for_ceph.communicate()
 ##if cephfs directory validate
-    if "ceph" in is_it_ceph:
-        print("yes, good choice")
+        if "ceph" in is_it_ceph:
+            print("yes, good choice")
 ##if not cephfs dir validate
-    elif "ceph" not in is_it_ceph:
-        print("not a valid cephfs directory")
-        do: sys.exit()
+        elif "ceph" not in is_it_ceph:
+            print("not a valid cephfs directory")
+            do: sys.exit()
 
 
 ###############################################################################

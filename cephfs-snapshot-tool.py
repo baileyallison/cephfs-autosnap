@@ -88,6 +88,9 @@ def main():
 
 if __name__ == "__main__":
 	main()
+def print_check(options):
+    if options.print_task:
+        print("hello!")
 
 def create_snaps(options):
     if options.createsnap:

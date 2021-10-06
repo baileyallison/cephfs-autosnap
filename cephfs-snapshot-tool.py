@@ -99,7 +99,7 @@ def main():
     (options, args) = parser.parse_args()
     
     if options.print_task:
-        print("hello! you have found the task that let me figure out how parser works"+time.strftime("%d/%m/%Y_%H:%M:%S"))
+        print("hello! you have found the task that let me figure out how parser works"+time.strftime("%d-%m-%Y_%H:%M:%S"))
     if options.createsnap:
         pathofCephFS_snaps(options)
 

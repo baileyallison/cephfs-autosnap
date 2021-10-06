@@ -60,8 +60,8 @@ def pathofCephFS_snaps():
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")
         do: sys.exit()
-
-pathofCephFS_snaps()
+#if options.createsnap:
+#    pathofCephFS_snaps()
 #################################################################################
 # auto cephfs snaps
 #################################################################################
@@ -77,16 +77,23 @@ pathofCephFS_snaps()
 # parses options, allows to create+edit+view snapshot tasks
 ################################################################################
 def main():
-    parser = OptionParser() #use optparse to handle command line arguments
+    parser = OptionParser()
     parser.add_option('-c', '--create-snap', action="store_true",
-		dest="createsnap", default=False, help="create snap on dir path")
+		dest="createsnap", default=False, help="create a snapshot on specified path")
+    parser.add_option('-s', '--schedule', action="store_true",
+		dest="schedulesnap", default=False, help="schedule a snapshot task on specified path")
     parser.add_option("-p", "--print", action="store_true",
-        dest="print_task", default=False, help="print debug message")
+        dest="print_task", default=False, help="print debug message for testing")
     (options, args) = parser.parse_args()
 
 if __name__ == "__main__":
 	main()
 
+def create_snaps(options):
+    if options.createsnap:
+        pathofCephFS_snaps()
+    else:
+        exit(1)
 ## not ready
     #parser.add_option("-t", "--take-time", action="store_false",
 	#	dest="take-time", default=True, help="take time of autosnaps")

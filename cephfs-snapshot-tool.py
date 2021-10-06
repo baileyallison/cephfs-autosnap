@@ -1,8 +1,21 @@
-#!/usr/bin/python3
-
+#!/usr/bin/env python3
 #################################################################################
-# CephFS-snapshots for taking CephFS-snapshots
-# Linux/GNU License here
+# cephfs-autosnap
+# create and schedule cephfs snapshots on cephfs directories
+# Copyright 2021, Bailey Allison <my-email-here@email.com>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #################################################################################
 from os import path
 import subprocess
@@ -63,11 +76,16 @@ pathofCephFS_snaps()
 ################################################################################
 # parses options, allows to create+edit+view snapshot tasks
 ################################################################################
-def parsingArgs():
+def main():
     parser = OptionParser() #use optparse to handle command line arguments
     parser.add_option('-c', '--create-snap', action="store_true",
 		dest="createsnap", type="string", default=False, help="create snap on dir path")
+    parser.add_option("-p", "--print", action="store_true",
+        dest="print_task", type="string", default=False, help="print debug message")
     (options, args) = parser.parse_args()
+
+if __name__ == "__main__":
+	main()
 
 ## not ready
     #parser.add_option("-t", "--take-time", action="store_false",

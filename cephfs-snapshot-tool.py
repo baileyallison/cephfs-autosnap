@@ -79,7 +79,7 @@ pathofCephFS_snaps()
 def main():
     parser = OptionParser() #use optparse to handle command line arguments
     parser.add_option('-c', '--create-snap', action="store_true",
-		dest="createsnap", type="string", default=False, help="create snap on dir path")
+		dest="createsnap", default=False, help="create snap on dir path")
     parser.add_option("-p", "--print", action="store_true",
         dest="print_task", type="string", default=False, help="print debug message")
     (options, args) = parser.parse_args()

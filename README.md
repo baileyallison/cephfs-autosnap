@@ -1,6 +1,6 @@
 # cephfs-autosnap
 
-A tool designed to take snapshots of Cephfs, both manual and automatic
+A tool designed to take snapshots of CephFS, both manual and automatic
 
 Currently only manual snapshotting works
 

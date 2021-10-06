@@ -16,45 +16,39 @@ from optparse import OptionParser
 # checks for cephfs mounts, and exits if none are found
 #################################################################################
 ##try to get this working without shell=true
-#def queryCephFSmounts():
-try:
-    cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
-##if no mounts are found exit
-except subprocess.CalledProcessError:
-    do: sys.exit()
+def queryCephFSmounts():
+    try:
+        cephfsMountChecks_df = subprocess.Popen(['df', '-PTh'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        cephfsMountChecks_awk = subprocess.Popen(['awk', '{print($7, $2)}'], stdin=cephfsMountChecks_df.stdout, stdout=subprocess.PIPE)
+        cephfsMountChecks_grep = subprocess.Popen(['grep', 'ceph'], stdin=cephfsMountChecks_awk.stdout, stdout=subprocess.PIPE, universal_newlines=True)
+        cephfsMountChecks_awk.stdout.close()
+        mount_check, err = cephfsMountChecks_grep.communicate()
+        if "ceph" not in mount_check:
+            sys.exit()
+    except subprocess.CalledProcessError:
+        sys.exit()
+
+queryCephFSmounts()
 
 
-#################################################################################
-# validate cephfs mount point and query where snaps would be taken
-#################################################################################
-else:
+def pathofCephFS_snaps():
     pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
     df_pathtocephfs.stdout.close()
     is_it_ceph, err = awk_for_ceph.communicate()
-##if cephfs directory validate
     if "ceph" in is_it_ceph:
-        print("yes, good choice")
-##if not cephfs dir validate
+        dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
+        if pathToDirQuery.endswith("/"):
+            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
+        elif pathToDirQuery.endswith(""):
+            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
+            print(pathToDirQuery.rsplit('/')[-1])
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")
         do: sys.exit()
 
-
-###############################################################################
-# manual cephfs snaps
-###############################################################################
-
-####What would you like your snapshot task(s) to be
-##Manual Snapshots
-    dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
-    if pathToDirQuery.endswith("/"):
-        mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
-    elif pathToDirQuery.endswith(""):
-        mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
-        print(pathToDirQuery.rsplit('/')[-1])
-
+pathofCephFS_snaps()
 #################################################################################
 # auto cephfs snaps
 #################################################################################
@@ -69,17 +63,20 @@ else:
 ################################################################################
 # parses options, allows to create+edit+view snapshot tasks
 ################################################################################
-#def parsingArgs():
-#    parser = OptionParser() #use optparse to handle command line arguments
-#    parser.add_option('-c', '--create-snap', action="store_true",
-#		dest="snap", type="string", default=False, help="create snap on dir path")
+def parsingArgs():
+    parser = OptionParser() #use optparse to handle command line arguments
+    parser.add_option('-c', '--create-snap', action="store_true",
+		dest="createsnap", type="string", default=False, help="create snap on dir path")
+    (options, args) = parser.parse_args()
+
+## not ready
     #parser.add_option("-t", "--take-time", action="store_false",
 	#	dest="take-time", default=True, help="take time of autosnaps")
     #parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
 	#	default=False, help="keep-time of autosnaps")
     #parser.add_option("-o", "--output", action="store_true", dest="output",
 	#	default=False, help="output current active snapshot tasks")
-#    (options, args) = parser.parse_args()
+
 
 #################################################################################
 # options
@@ -88,30 +85,12 @@ else:
 #	if no_output_flags(options):
 #		return "Dev"
 #	output = []
-#	if options.snap:
+#	if options.createsnap:
 #		do: queryCephFSmounts
+
+## not ready
 	#if options.taketime:
 	#	option
 	#if options.keeptime:
 	#	option
 #	return ",".join(output)
-
-################################################################################
-# function name: no_output_flags
-# receives: options from parseOptions
-# does: determines if no flags are passed for default output
-# returns: True if default output, else False
-################################################################################
-#def no_output_flags(options):
-#	return (not options.taketime and not options.keeptime
-#			and not options.snap)
-
-        
-#################################################################################
-# don't need this anymore
-#################################################################################
-
-# print list of found mounts -- not neccessary to print
-# else:
-#     cephfsMounts = cephfsMountChecks.replace(" ceph", "")
-#     print (f"cephfs mounts are located at:\n{cephfsMounts}", end='')

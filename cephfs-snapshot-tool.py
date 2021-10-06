@@ -24,7 +24,7 @@ def queryCephFSmounts():
         cephfsMountChecks_grep = subprocess.Popen(['grep', 'ceph'], stdin=cephfsMountChecks_awk.stdout, stdout=subprocess.PIPE,  universal_newlines=True)
         cephfsMountChecks_df.stdout.close()
         cephfsMountChecks_awk.stdout.close()
-        #is_it_ceph, err = cephfsMountChecks_grep.communicate()
+        err = cephfsMountChecks_grep.communicate()
     except subprocess.CalledProcessError:
         do: sys.exit()
 

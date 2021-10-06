@@ -22,6 +22,9 @@ import subprocess
 import re
 import sys
 from optparse import OptionParser
+import sched, time
+import calendar
+import datetime
 
 #################################################################################
 # query to see if cephfs mounts exist
@@ -47,7 +50,6 @@ queryCephFSmounts()
 ###################################################################################
 def pathofCephFS_snaps(options):
     pathToDirQuery=options.createsnap
-    #pathToDirQuery=input("Path to CephFS dir where snapshots should be taken: ")
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
     df_pathtocephfs.stdout.close()
@@ -74,7 +76,11 @@ def pathofCephFS_snaps(options):
 #cephfsdir-snapvar -- path to cephfsdir to take auto snaps
 #timetotake-var -- the time to take snaps - x mins,x hourly,x daily,x weekly,x yearly
 #timetodelete-var -- the time to delete snaps - x mins,x hourly,x daily,x weekly,x yearly
-#def scheduledcephfsSnaps():
+
+
+##def scheduledcephfsSnaps(options):
+##    datetime.datetime()
+##    datetime.timedelta()
 
 
 ################################################################################
@@ -87,20 +93,18 @@ def main():
         metavar="/path/to/snapshot/dest/")
     parser.add_option('-s', '--schedule-snap', action="store_true",
 		dest="schedulesnap", default=False, help="schedule a snapshot task on specified path",
-        metavar="/path/to/snapshot/dest schedule retention")
+        metavar="/path/to/snapshot/dest schedule-time-1d retention-time-1y")
     parser.add_option("-p", "--print", action="store_true",
         dest="print_task", default=False, help="print debug message for testing")
     (options, args) = parser.parse_args()
     
     if options.print_task:
-        print("hello! you have found the task that let me figure out how parser works")
+        print("hello! you have found the task that let me figure out how parser works"+time.strftime("%d/%m/%Y_%H:%M:%S"))
     if options.createsnap:
         pathofCephFS_snaps(options)
 
 if __name__ == "__main__":
 	main()
-
-
 #################################################################################
 # options
 #################################################################################

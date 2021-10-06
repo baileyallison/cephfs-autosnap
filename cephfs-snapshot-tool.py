@@ -48,12 +48,13 @@ def queryCephFSmounts():
 
 ####What would you like your snapshot task(s) to be
 ##Manual Snapshots
-    dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
-    if pathToDirQuery.endswith("/"):
-        mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
-    elif pathToDirQuery.endswith(""):
-        mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
-        print(pathToDirQuery.rsplit('/')[-1])
+        dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
+        if pathToDirQuery.endswith("/"):
+            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
+        elif pathToDirQuery.endswith(""):
+            mkdir_snap = subprocess.Popen(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
+            print(pathToDirQuery.rsplit('/')[-1])
+
 queryCephFSmounts()
 ###############################################################################
 # manual cephfs snaps

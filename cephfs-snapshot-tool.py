@@ -21,15 +21,16 @@ def queryCephFSmounts():
         #cephfsMountChecks = subprocess.check_output("df -PTh | awk '{print($7, $2)'} | grep ceph",shell=True, encoding='utf=8')
         cephfsMountChecks_df = subprocess.Popen(['df', '-PTh'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         cephfsMountChecks_awk = subprocess.Popen(['awk', '{print($7, $2)}'], stdin=cephfsMountChecks_df.stdout, stdout=subprocess.PIPE)
-        cephfsMountChecks_grep = subprocess.Popen(['grep', 'ceph'], stdin=cephfsMountChecks_awk.stdout, stdout=subprocess.PIPE,  universal_newlines=True)
-        cephfsMountChecks_df.stdout.close()
+        cephfsMountChecks_grep = subprocess.Popen(['grep', 'ceph'], stdin=cephfsMountChecks_awk.stdout, stdout=subprocess.PIPE, universal_newlines=True)
         cephfsMountChecks_awk.stdout.close()
-        err = cephfsMountChecks_grep.communicate()
+        mount_check, err = cephfsMountChecks_grep.communicate()
+        if "ceph" not in mount_check:
+            print("hello")
+            do: sys.exit()
     except subprocess.CalledProcessError:
         do: sys.exit()
 
 queryCephFSmounts()
-
 
 
 def pathofCephFS_snaps():

@@ -83,7 +83,7 @@ def pathofCephFS_snaps(options):
 def main():
     parser = OptionParser()
     parser.add_option('-c', '--create-snap', action="store",
-		dest="createsnap", default=False, help="create a snapshot on specified path")
+		dest="createsnap", default=False, help="create a snapshot on specified path", metavar="path to snapshot dest")
     parser.add_option('-s', '--schedule-snap', action="store_true",
 		dest="schedulesnap", default=False, help="schedule a snapshot task on specified path")
     parser.add_option("-p", "--print", action="store_true",

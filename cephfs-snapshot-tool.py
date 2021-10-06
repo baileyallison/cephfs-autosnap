@@ -55,7 +55,7 @@ def pathofCephFS_snaps():
         dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
         if pathToDirQuery.endswith("/"):
             mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
-            print("Snapshot created:"+(mkdir_snap))
+            print("Snapshot created:"+str(mkdir_snap))
         elif pathToDirQuery.endswith(""):
             mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
             print("Snapshot created:"+(pathToDirQuery.rsplit('/')[-1])+"-"+(dayTimeVar))

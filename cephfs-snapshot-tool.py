@@ -57,12 +57,12 @@ def pathofCephFS_snaps(options):
     if "ceph" in is_it_ceph:
         dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
         if pathToDirQuery.endswith("/"):
-            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
+            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
             ## does not print correct path for visual feedback -- prints just the date
-            print("Snapshot created:"+(pathToDirQuery.rsplit('/')[-1])+"-"+f"{dayTimeVar} "+"at: "+f"{pathToDirQuery}"+".snap/")
+            print("Snapshot created:"+(pathToDirQuery.rsplit('/')[-2])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+"at: "+f"{pathToDirQuery}"+".snap/")
         elif pathToDirQuery.endswith(""):
-            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+time.strftime("%Y-%m-%d_%H:%M:%S")])
-            print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-1])+"-"+f"{dayTimeVar} "+"at: "+f"{pathToDirQuery}"+"/.snap/")
+            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
+            print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-1])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+"at: "+f"{pathToDirQuery}"+"/.snap/")
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")
         do: sys.exit()

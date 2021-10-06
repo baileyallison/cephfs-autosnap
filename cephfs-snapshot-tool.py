@@ -36,10 +36,10 @@ def queryCephFSmounts():
         cephfsMountChecks_awk.stdout.close()
         mount_check, err = cephfsMountChecks_grep.communicate()
         if "ceph" not in mount_check:
+            print("No CephFS mounts found")
             sys.exit()
     except subprocess.CalledProcessError:
         sys.exit()
-
 queryCephFSmounts()
 
 ###################################################################################
@@ -57,10 +57,10 @@ def pathofCephFS_snaps(options):
         if pathToDirQuery.endswith("/"):
             mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+f"-{dayTimeVar}"])
             ## does not print correct path for visual feedback -- prints just the date
-            print("Snapshot created:"+(pathToDirQuery.rsplit('/')[-1])+"-"+(dayTimeVar))
+            print("Snapshot created:"+(pathToDirQuery.rsplit('/')[-1])+"-"+(dayTimeVar)+"at:"(pathToDirQuery)+"/.snap/")
         elif pathToDirQuery.endswith(""):
             mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+f"-{dayTimeVar}"])
-            print("Snapshot created:"+(pathToDirQuery.rsplit('/')[-1])+"-"+(dayTimeVar))
+            print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-1])+"-"+(dayTimeVar)+"at:"(pathToDirQuery)+"/.snap/")
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")
         do: sys.exit()
@@ -83,9 +83,11 @@ def pathofCephFS_snaps(options):
 def main():
     parser = OptionParser()
     parser.add_option('-c', '--create-snap', action="store",
-		dest="createsnap", default=False, help="create a snapshot on specified cephfs path", metavar="/path/to/snapshot/dest/")
+		dest="createsnap", default=False, help="create a snapshot on specified cephfs path", 
+        metavar="/path/to/snapshot/dest/")
     parser.add_option('-s', '--schedule-snap', action="store_true",
-		dest="schedulesnap", default=False, help="schedule a snapshot task on specified path")
+		dest="schedulesnap", default=False, help="schedule a snapshot task on specified path",
+        metavar="/path/to/snapshot/dest schedule retention")
     parser.add_option("-p", "--print", action="store_true",
         dest="print_task", default=False, help="print debug message for testing")
     (options, args) = parser.parse_args()
@@ -97,13 +99,6 @@ def main():
 
 if __name__ == "__main__":
 	main()
-## not ready
-    #parser.add_option("-t", "--take-time", action="store_false",
-	#	dest="take-time", default=True, help="take time of autosnaps")
-    #parser.add_option("-k", "--keep-time", action="store_true", dest="keeptime",
-	#	default=False, help="keep-time of autosnaps")
-    #parser.add_option("-o", "--output", action="store_true", dest="output",
-	#	default=False, help="output current active snapshot tasks")
 
 
 #################################################################################
@@ -113,12 +108,4 @@ if __name__ == "__main__":
 #	if no_output_flags(options):
 #		return "Dev"
 #	output = []
-#	if options.createsnap:
-#		do: queryCephFSmounts
-
-## not ready
-	#if options.taketime:
-	#	option
-	#if options.keeptime:
-	#	option
 #	return ",".join(output)

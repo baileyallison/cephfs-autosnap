@@ -30,7 +30,6 @@ import datetime
 # query to see if cephfs mounts exist
 # checks for cephfs mounts, and exits if none are found
 #################################################################################
-##try to get this working without shell=true
 def queryCephFSmounts():
     try:
         cephfsMountChecks_df = subprocess.Popen(['df', '-PTh'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
@@ -91,8 +90,28 @@ def pathofCephFS_snaps(options):
 #1h,etc
 
 
-def scheduledcephfsSnaps(options):
-    secondVar=(second,sec,s
+#def scheduledcephfsSnaps(options):
+#    secondVar="second","sec","s"
+#    minuteVar="minute","min"
+#    dayVar="day","d"
+#    weekVar="week","w"
+#    monthVar="month","mon","m"
+#    yearVar="year","y"
+    
+#    if secondVar in options.schedulesnap:
+#        create+storesnaptaskconfig
+#    elif minuteVar in options.schedulesnap:
+#        create+storesnaptaskconfig
+#    elif dayVar in options.schedulesnap:
+#        create+storesnaptaskconfig
+#    elif weekVar in options.schedulesnap:
+#        create+storesnaptaskconfig
+#    elif monthVar in options.schedulesnap:
+#        create+storesnaptaskconfig
+#    elif yearVar in options.schedulesnap:
+#        create+storesnaptaskconfig
+
+
 ##    datetime.datetime()
 ##    datetime.timedelta()
 #currenttime - snaptakentime > retentiontime
@@ -109,7 +128,7 @@ def main():
         metavar="/path/to/snapshot/dest/")
     parser.add_option('-s', '--schedule-snap', action="store_true",
 		dest="schedulesnap", default=False, help="schedule a snapshot task on specified path",
-        metavar="/path/to/snapshot/dest schedule-time-1d retention-time-1y")
+        metavar="/path/to/snapshot/dest schedule-time retention-time")
     parser.add_option("-p", "--print", action="store_true",
         dest="print_task", default=False, help="print debug message for testing")
     (options, args) = parser.parse_args()

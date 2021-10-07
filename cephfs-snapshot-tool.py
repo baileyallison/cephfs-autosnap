@@ -56,10 +56,10 @@ def pathofCephFS_snaps(options):
     is_it_ceph, err = awk_for_ceph.communicate()
     if "ceph" in is_it_ceph:
         if pathToDirQuery.endswith("/"):
-            subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
+            subprocess.run(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
             print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-2])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+" at "+f"{pathToDirQuery}"+".snap/")
         elif pathToDirQuery.endswith(""):
-            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
+            subprocess.run(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
             print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-1])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+" at "+f"{pathToDirQuery}"+"/.snap/")
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")

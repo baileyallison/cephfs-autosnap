@@ -51,7 +51,7 @@ queryCephFSmounts()
 ###################################################################################
 def pathofCephFS_snaps(options):
     pathToDirQuery=options.createsnap
-    df_pathtocephfs = subprocess.Popen(['df', '-PTh', options.createsnap], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
     df_pathtocephfs.stdout.close()
     is_it_ceph, err = awk_for_ceph.communicate()

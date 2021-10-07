@@ -55,9 +55,8 @@ def pathofCephFS_snaps(options):
     df_pathtocephfs.stdout.close()
     is_it_ceph, err = awk_for_ceph.communicate()
     if "ceph" in is_it_ceph:
-        dayTimeVar = subprocess.check_output(['date', '+%Y-%m-%d_%H%M%S'], universal_newlines=True).strip()
         if pathToDirQuery.endswith("/"):
-            mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
+            subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
             print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-2])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+" at "+f"{pathToDirQuery}"+".snap/")
         elif pathToDirQuery.endswith(""):
             mkdir_snap = subprocess.check_output(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
@@ -98,7 +97,7 @@ def main():
     (options, args) = parser.parse_args()
     
     if options.print_task:
-        print("hello! you have found the task that let me figure out how parser works"+ time.strftime("%Y-%m-%d_%H:%M:%S"))
+        print("hello! you have found the task that let me figure out how parser works "+time.strftime("%Y-%m-%d_%H:%M:%S"))
     if options.createsnap:
         pathofCephFS_snaps(options)
 

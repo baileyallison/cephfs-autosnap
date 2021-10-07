@@ -59,7 +59,7 @@ def pathofCephFS_snaps(options):
             subprocess.run(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
             print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-2])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+" at "+f"{pathToDirQuery}"+".snap/")
         elif pathToDirQuery.endswith(""):
-            subprocess.run(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.time()])
+            subprocess.run(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.strftime])
             print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-1])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+" at "+f"{pathToDirQuery}"+"/.snap/")
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")

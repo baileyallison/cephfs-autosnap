@@ -59,12 +59,13 @@ def pathofCephFS_snaps(options):
             subprocess.run(['mkdir', f"{pathToDirQuery}"+'.snap/'+f"{pathToDirQuery.split('/')[-2]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
             print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-2])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+" at "+f"{pathToDirQuery}"+".snap/")
         elif pathToDirQuery.endswith(""):
-            subprocess.run(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")])
+            subprocess.run(['mkdir', f"{pathToDirQuery}"+'/.snap/'+f"{pathToDirQuery.rsplit('/')[-1]}"+"-"+time.time()])
             print("Snapshot created: "+(pathToDirQuery.rsplit('/')[-1])+"-"+time.strftime("%Y-%m-%d_%H:%M:%S")+" at "+f"{pathToDirQuery}"+"/.snap/")
     elif "ceph" not in is_it_ceph:
         print("not a valid cephfs directory")
         do: sys.exit()
 
+time.time
 #################################################################################
 # auto cephfs snaps
 #################################################################################
@@ -81,43 +82,25 @@ def pathofCephFS_snaps(options):
 #week|w = week variable
 #month|mon|m = month variable 
 #year|y = year variable
-#int = number variable
-# for sec 0-60 limit
-# for min 0-60 limit
-# for hour 0-24 limit
-# rest should be ok within reason
-#should be [int+var]
-#1h,etc
+
+##timevars
+#secV = 1
+#min = 60
+#hour = 3600
+#week = 604800
+#month = 2629743
+#year = int(31556926)
 
 
 #def scheduledcephfsSnaps(options):
-#    secondVar="second","sec","s"
-#    minuteVar="minute","min"
-#    dayVar="day","d"
-#    weekVar="week","w"
-#    monthVar="month","mon","m"
-#    yearVar="year","y"
+
+
+#def createSnapsTime():
+
+
+#def deleteSnaps():
+#    maxSnapTime = 
     
-#    if secondVar in options.schedulesnap:
-#        create+storesnaptaskconfig
-#    elif minuteVar in options.schedulesnap:
-#        create+storesnaptaskconfig
-#    elif dayVar in options.schedulesnap:
-#        create+storesnaptaskconfig
-#    elif weekVar in options.schedulesnap:
-#        create+storesnaptaskconfig
-#    elif monthVar in options.schedulesnap:
-#        create+storesnaptaskconfig
-#    elif yearVar in options.schedulesnap:
-#        create+storesnaptaskconfig
-
-
-##    datetime.datetime()
-##    datetime.timedelta()
-#currenttime - snaptakentime > retentiontime
-#    delete snap
-
-
 ################################################################################
 # parses options, allows to create+edit+view snapshot tasks
 ################################################################################
@@ -140,11 +123,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-#################################################################################
-# options
-#################################################################################
-#def choose_output_header(options):
-#	if no_output_flags(options):
-#		return "Dev"
-#	output = []
-#	return ",".join(output)

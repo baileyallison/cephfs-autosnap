@@ -50,7 +50,7 @@ queryCephFSmounts()
 # could use some error handling for subprocess
 ###################################################################################
 def pathofCephFS_snaps(options):
-    pathToDirQuery=options.createsnap
+    pathToDirQuery = options.createsnap
     df_pathtocephfs = subprocess.Popen(['df', '-PTh', pathToDirQuery], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
     awk_for_ceph = subprocess.Popen(['awk', '{print $2}'], stdin=df_pathtocephfs.stdout, stdout=subprocess.PIPE, universal_newlines=True)
     df_pathtocephfs.stdout.close()
@@ -73,13 +73,30 @@ def pathofCephFS_snaps(options):
 ##Auto Snapshots
 ##vars for auto snaps
 #cephfsdir-snapvar -- path to cephfsdir to take auto snaps
-#timetotake-var -- the time to take snaps - x mins,x hourly,x daily,x weekly,x yearly
-#timetodelete-var -- the time to delete snaps - x mins,x hourly,x daily,x weekly,x yearly
+#snap-interval-var -- the time to take snaps - x mins,x hourly,x daily,x weekly,x yearly
+#snap-retention-var -- the time to delete snaps - x mins,x hourly,x daily,x weekly,x yearly
+#second|sec|s = second variable
+#minute|min = minute variable
+#hour|h = hour variable
+#day|d = day variable
+#week|w = week variable
+#month|mon|m = month variable 
+#year|y = year variable
+#int = number variable
+# for sec 0-60 limit
+# for min 0-60 limit
+# for hour 0-24 limit
+# rest should be ok within reason
+#should be [int+var]
+#1h,etc
 
 
-##def scheduledcephfsSnaps(options):
+def scheduledcephfsSnaps(options):
+    secondVar=(second,sec,s
 ##    datetime.datetime()
 ##    datetime.timedelta()
+#currenttime - snaptakentime > retentiontime
+#    delete snap
 
 
 ################################################################################

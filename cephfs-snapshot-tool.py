@@ -47,6 +47,7 @@ queryCephFSmounts()
 
 ###################################################################################
 # manual cephfs snapshots
+# could use some error handling for subprocess
 ###################################################################################
 def pathofCephFS_snaps(options):
     pathToDirQuery=options.createsnap

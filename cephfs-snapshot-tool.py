@@ -65,7 +65,6 @@ def pathofCephFS_snaps(options):
         print("not a valid cephfs directory")
         do: sys.exit()
 
-time.time
 #################################################################################
 # auto cephfs snaps
 #################################################################################
